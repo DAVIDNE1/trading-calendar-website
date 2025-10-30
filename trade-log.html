@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Journal - Trade Log</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="public/journal.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-content">
+            <div class="nav-title">
+                <div class="logo-icon">
+                    <svg class="icon icon-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 3v18h18"/>
+                        <path d="M7 15l4-4 3 3 5-7"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Trading Journal</h1>
+                    <p>Track your performance</p>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <a class="btn" href="trading-journal.html" id="navOverview">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-7"/></svg>
+                    Overview
+                </a>
+                <a class="btn" href="calendar.html" id="navCalendar">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Calendar
+                </a>
+                <a class="btn" href="analytics.html" id="navAnalytics">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="19" x2="4" y2="10"/><line x1="12" y1="19" x2="12" y2="4"/><line x1="20" y1="19" x2="20" y2="14"/></svg>
+                    Analytics
+                </a>
+                <a class="btn active" href="trade-log.html" id="navTradeLog">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                    Trade Log
+                </a>
+                <button class="btn btn-primary add-trade" onclick="openAddTrade()">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Add Trade
+                </button>
+                <button class="btn" onclick="openSettings()" id="navSettings">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3.4 15a1.65 1.65 0 0 0-1.51-1H1.8a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 3.4 8a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 8 3.4a1.65 1.65 0 0 0 1-1.51V1.8a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 3.4a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 20.6 8c.36 0 .71.13 1 .36l.06.06a2 2 0 0 1 0 2.83l-.06.06c-.29.23-.64.36-1 .36a1.65 1.65 0 0 0-1.2.6 1.65 1.65 0 0 0-.4 1.14z"/></svg>
+                    Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="tradeLogView" class="main-view view-content">
+            <h2 style="font-size: 32px; font-weight: 900; margin-bottom: 10px;">Trade Log</h2>
+            <p style="color: var(--text-secondary); font-size: 16px; margin-bottom: 32px;">Complete trade history</p>
+            <div id="allTradesList"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">⚙️ Settings</h2>
+                <button class="icon-btn" onclick="closeSettingsModal()">✕</button>
+            </div>
+            <div class="modal-section">
+                <h3 class="section-title">🎨 Theme</h3>
+                <div class="settings-grid">
+                    <div class="theme-card active" onclick="setTheme('light')" id="themeLight">
+                        <div class="theme-icon">☀️</div>
+                        <div class="theme-name">Light</div>
+                    </div>
+                    <div class="theme-card" onclick="setTheme('dark')" id="themeDark">
+                        <div class="theme-icon">🌙</div>
+                        <div class="theme-name">Dark</div>
+                    </div>
+                    <div class="theme-card" onclick="setTheme('amoled')" id="themeAmoled">
+                        <div class="theme-icon">⚫</div>
+                        <div class="theme-name">AMOLED</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-section">
+                <h3 class="section-title">💾 Data Backup</h3>
+                <div class="form-group">
+                    <button class="btn" onclick="exportData()" style="width: 100%;">📥 Export Data (CSV)</button>
+                </div>
+                <div class="form-group">
+                    <button class="btn" onclick="document.getElementById('importFile').click()" style="width: 100%;">📤 Import Data (CSV/JSON)</button>
+                    <input type="file" id="importFile" accept=".csv,.json" style="display:none;" onchange="importData(event)">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="closeSettingsModal()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="tradeModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="tradeModalTitle">Add Trade</h2>
+                <button class="icon-btn" onclick="closeTradeModal()">✕</button>
+            </div>
+            <form id="tradeForm">
+                <div class="form-group">
+                    <label class="form-label">📅 Date</label>
+                    <input type="date" id="tradeDate" class="form-input" required>
+                </div>
+                <div class="form-group symbol-dropdown">
+                    <label class="form-label">💹 Symbol</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="tradeSymbol" class="form-input" placeholder="e.g., BTCUSD" required list="symbolList">
+                        <datalist id="symbolList"></datalist>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select id="tradeType" class="form-select" onchange="updateSymbolList()">
+                            <option value="crypto">Crypto</option>
+                            <option value="futures">Futures</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Side</label>
+                        <select id="tradeSide" class="form-select">
+                            <option value="Long">Long</option>
+                            <option value="Short">Short</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Entry Price</label>
+                        <input type="number" id="tradeEntry" step="0.01" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Exit Price</label>
+                        <input type="number" id="tradeExit" step="0.01" class="form-input" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Size</label>
+                    <input type="number" id="tradeSize" step="0.1" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">📝 Notes (optional)</label>
+                    <input type="text" id="tradeNotes" class="form-input">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn" onclick="closeTradeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
